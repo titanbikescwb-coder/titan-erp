@@ -108,3 +108,16 @@
     -webkit-tap-highlight-color: transparent;
   }
 }
+/* FIX GLOBAL DARK MODE */
+.bg-white {
+  @apply bg-titan-background-sec !important;
+}
+
+.text-black {
+  @apply text-white !important;
+}
+
+.border-gray-200,
+.border-gray-300 {
+  @apply border-titan-border !important;
+}
