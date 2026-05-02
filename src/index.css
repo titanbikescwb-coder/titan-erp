@@ -54,7 +54,7 @@
     @apply bg-titan-background;
   }
 
-  /* Scrollbar Customization - Apple Style */
+  /* Scrollbar */
   ::-webkit-scrollbar {
     width: 6px;
     height: 6px;
@@ -81,7 +81,7 @@
     z-index: 50;
   }
 
-  /* Premium Interface Patterns */
+  /* COMPONENTES PREMIUM */
   .btn-premium {
     @apply flex items-center justify-center gap-2 px-6 py-3 font-semibold rounded-2xl transition-all active:scale-[0.98];
   }
@@ -94,7 +94,6 @@
     @apply bg-titan-background-sec/70 backdrop-blur-md border border-white/5;
   }
 
-  /* Global selection style */
   .active-selection {
     @apply bg-titan-primary text-white shadow-lg shadow-titan-primary/30;
   }
@@ -103,21 +102,74 @@
     @apply transition-all duration-200;
   }
 
-  /* Reset tapping highlight */
   * {
     -webkit-tap-highlight-color: transparent;
   }
 }
-/* FIX GLOBAL DARK MODE */
-.bg-white {
+
+/* ===== DARK MODE GLOBAL FIX (ULTRA COMPLETO) ===== */
+
+/* fundos claros */
+.bg-white,
+.bg-gray-50,
+.bg-gray-100,
+.bg-gray-200 {
   @apply bg-titan-background-sec !important;
 }
 
-.text-black {
+/* textos escuros */
+.text-black,
+.text-gray-800,
+.text-gray-900 {
   @apply text-white !important;
 }
 
+/* textos secundários */
+.text-gray-500,
+.text-gray-600,
+.text-gray-400 {
+  @apply text-white/60 !important;
+}
+
+/* bordas */
 .border-gray-200,
-.border-gray-300 {
+.border-gray-300,
+.border-gray-400 {
   @apply border-titan-border !important;
+}
+
+/* inputs forçados */
+input, select, textarea {
+  background-color: #121212 !important;
+  color: white !important;
+  border-color: #2C2C2C !important;
+}
+
+/* placeholder */
+::placeholder {
+  color: rgba(255,255,255,0.4) !important;
+}
+
+/* ícones */
+svg {
+  color: white;
+  fill: currentColor;
+}
+
+/* tabelas */
+table {
+  color: white;
+}
+
+th {
+  color: rgba(255,255,255,0.7);
+}
+
+td {
+  color: white;
+}
+
+/* herança global */
+* {
+  color: inherit;
 }
