@@ -1,16 +1,15 @@
 @import "tailwindcss";
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
 
+/* VARIÁVEIS */
 :root {
-  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
-  
-  --color-titan-primary: #0A84FF;
-  --color-titan-primary-hover: #0070E0;
-  --color-titan-background: #0A0A0A;
-  --color-titan-background-sec: #121212;
-  --color-titan-border: #2C2C2C;
+  --color-primary: #0A84FF;
+  --color-background: #0A0A0A;
+  --color-background-sec: #121212;
+  --color-border: #2C2C2C;
 }
 
+/* BASE */
 @layer base {
   html, body, #root {
     margin: 0;
@@ -20,137 +19,144 @@
     display: flex;
     flex-direction: column;
     overflow: hidden;
-    @apply bg-titan-background font-sans text-white antialiased;
+    background-color: #0A0A0A;
+    font-family: "Inter", sans-serif;
+    color: white;
+    -webkit-font-smoothing: antialiased;
   }
 
   h1, h2 {
-    @apply font-black tracking-tight text-white mb-4;
+    font-weight: 900;
+    letter-spacing: -0.02em;
+    margin-bottom: 1rem;
   }
 
   h3, h4, h5, h6 {
-    @apply font-bold tracking-tight text-white;
-  }
-
-  p, span, div {
-    @apply font-medium;
+    font-weight: 700;
   }
 
   p {
-    @apply leading-relaxed text-white/60;
+    color: rgba(255,255,255,0.6);
+    line-height: 1.6;
   }
 
   input, select, textarea {
-    @apply bg-titan-background-sec border border-titan-border text-white rounded-2xl px-4 py-3 focus:border-titan-primary focus:ring-4 focus:ring-titan-primary/20 focus:outline-none transition-all font-medium;
+    background-color: #121212;
+    border: 1px solid #2C2C2C;
+    color: white;
+    border-radius: 16px;
+    padding: 12px 16px;
+    font-weight: 500;
+    outline: none;
+    transition: all 0.2s;
+  }
+
+  input:focus, select:focus, textarea:focus {
+    border-color: #0A84FF;
+    box-shadow: 0 0 0 3px rgba(10,132,255,0.2);
   }
 
   .container {
     flex: 1;
     overflow-y: auto;
     padding: 2rem 1.5rem;
-    min-height: 0;
-    @apply bg-titan-background;
+    background-color: #0A0A0A;
   }
 
-  /* Scrollbar */
+  /* SCROLL */
   ::-webkit-scrollbar {
     width: 6px;
-    height: 6px;
-  }
-
-  ::-webkit-scrollbar-track {
-    background: transparent;
   }
 
   ::-webkit-scrollbar-thumb {
-    @apply bg-white/10 rounded-full transition-colors;
+    background: rgba(255,255,255,0.1);
+    border-radius: 999px;
   }
 
-  ::-webkit-scrollbar-thumb:hover {
-    @apply bg-white/20;
-  }
-
+  /* HEADER */
   .header {
     height: 72px;
-    @apply bg-titan-background/80 backdrop-blur-xl border-b border-titan-border text-white;
+    background: rgba(10,10,10,0.8);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid #2C2C2C;
     display: flex;
     align-items: center;
-    flex-shrink: 0;
-    z-index: 50;
+    padding: 0 20px;
   }
 
-  /* COMPONENTES PREMIUM */
+  /* BOTÕES */
   .btn-premium {
-    @apply flex items-center justify-center gap-2 px-6 py-3 font-semibold rounded-2xl transition-all active:scale-[0.98];
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 12px 20px;
+    border-radius: 16px;
+    font-weight: 600;
+    background-color: #0A84FF;
+    color: white;
+    transition: all 0.2s;
   }
 
+  .btn-premium:hover {
+    background-color: #0070E0;
+  }
+
+  /* CARDS */
   .card-premium {
-    @apply bg-titan-background-sec rounded-[28px] border border-titan-border shadow-2xl shadow-black/50 transition-all hover:border-titan-primary/30;
+    background-color: #121212;
+    border: 1px solid #2C2C2C;
+    border-radius: 24px;
+    padding: 20px;
+    transition: all 0.2s;
   }
 
+  .card-premium:hover {
+    border-color: rgba(10,132,255,0.4);
+  }
+
+  /* GLASS */
   .glass-premium {
-    @apply bg-titan-background-sec/70 backdrop-blur-md border border-white/5;
-  }
-
-  .active-selection {
-    @apply bg-titan-primary text-white shadow-lg shadow-titan-primary/30;
-  }
-
-  button, a {
-    @apply transition-all duration-200;
-  }
-
-  * {
-    -webkit-tap-highlight-color: transparent;
+    background: rgba(18,18,18,0.7);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255,255,255,0.05);
   }
 }
 
-/* ===== DARK MODE GLOBAL FIX (ULTRA COMPLETO) ===== */
+/* ===== CORREÇÕES DARK MODE ===== */
 
 /* fundos claros */
 .bg-white,
 .bg-gray-50,
 .bg-gray-100,
 .bg-gray-200 {
-  @apply bg-titan-background-sec !important;
+  background-color: #121212 !important;
 }
 
 /* textos escuros */
 .text-black,
 .text-gray-800,
 .text-gray-900 {
-  @apply text-white !important;
+  color: white !important;
 }
 
 /* textos secundários */
 .text-gray-500,
 .text-gray-600,
 .text-gray-400 {
-  @apply text-white/60 !important;
+  color: rgba(255,255,255,0.6) !important;
 }
 
 /* bordas */
 .border-gray-200,
 .border-gray-300,
 .border-gray-400 {
-  @apply border-titan-border !important;
-}
-
-/* inputs forçados */
-input, select, textarea {
-  background-color: #121212 !important;
-  color: white !important;
   border-color: #2C2C2C !important;
 }
 
-/* placeholder */
+/* placeholders */
 ::placeholder {
-  color: rgba(255,255,255,0.4) !important;
-}
-
-/* ícones */
-svg {
-  color: white;
-  fill: currentColor;
+  color: rgba(255,255,255,0.4);
 }
 
 /* tabelas */
@@ -160,8 +166,4 @@ table {
 
 th {
   color: rgba(255,255,255,0.7);
-}
-
-td {
-  color: white;
 }
