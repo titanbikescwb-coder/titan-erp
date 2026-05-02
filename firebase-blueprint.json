@@ -1,0 +1,464 @@
+{
+  "entities": {
+    "user": {
+      "title": "User",
+      "description": "User profile and permissions",
+      "type": "object",
+      "properties": {
+        "uid": { "type": "string" },
+        "email": { "type": "string", "format": "email" },
+        "name": { "type": "string" },
+        "role": { "type": "string", "enum": ["admin", "user"] },
+        "active": { "type": "boolean" },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "permissions": {
+          "type": "object",
+          "properties": {
+            "dashboard": { "type": "boolean" },
+            "clientes": { "type": "boolean" },
+            "produtos": { "type": "boolean" },
+            "vendas": { "type": "boolean" },
+            "caixa": { "type": "boolean" },
+            "financeiro": { "type": "boolean" },
+            "relatorios": { "type": "boolean" },
+            "configuracoes": { "type": "boolean" },
+            "fiscal": { "type": "boolean" },
+            "compras": { "type": "boolean" },
+            "comissoes": { "type": "boolean" },
+            "crm": { "type": "boolean" },
+            "agenda": { "type": "boolean" },
+            "ordemServico": { "type": "boolean" }
+          }
+        }
+      },
+      "required": ["uid", "email", "role", "permissions", "active"]
+    },
+    "saas_venda": {
+      "title": "SaaS Venda",
+      "description": "SaaS model sale record",
+      "type": "object",
+      "properties": {
+        "total": { "type": "number" },
+        "status": { "type": "string", "enum": ["pendente", "finalizado"] },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "userId": { "type": "string" }
+      },
+      "required": ["total", "status", "createdAt", "userId"]
+    },
+    "saas_caixa": {
+      "title": "SaaS Caixa",
+      "description": "SaaS model cash movement",
+      "type": "object",
+      "properties": {
+        "type": { "type": "string", "enum": ["entrada", "saida"] },
+        "origin": { "type": "string", "enum": ["venda", "os", "manual"] },
+        "value": { "type": "number" },
+        "date": { "type": "string", "format": "date-time" },
+        "userId": { "type": "string" }
+      },
+      "required": ["type", "origin", "value", "date", "userId"]
+    },
+    "log": {
+      "title": "Action Log",
+      "description": "System action logs for audit",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string" },
+        "userEmail": { "type": "string" },
+        "action": { "type": "string" },
+        "module": { "type": "string" },
+        "timestamp": { "type": "string", "format": "date-time" },
+        "details": { "type": "string" }
+      },
+      "required": ["userId", "action", "module", "timestamp"]
+    },
+    "cashSession": {
+      "title": "Cash Session",
+      "description": "A daily cash register session",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string" },
+        "userName": { "type": "string" },
+        "openedAt": { "type": "string", "format": "date-time" },
+        "closedAt": { "type": "string", "format": "date-time" },
+        "initialValue": { "type": "number" },
+        "finalValueCash": { "type": "number" },
+        "finalValueCard": { "type": "number" },
+        "finalValuePix": { "type": "number" },
+        "totalMovementsIn": { "type": "number" },
+        "totalMovementsOut": { "type": "number" },
+        "status": { "type": "string", "enum": ["open", "closed"] }
+      },
+      "required": ["userId", "openedAt", "initialValue", "status"]
+    },
+    "cashMovement": {
+      "title": "Cash Movement",
+      "description": "A manual entry or exit in a cash session",
+      "type": "object",
+      "properties": {
+        "sessionId": { "type": "string" },
+        "userId": { "type": "string" },
+        "type": { "type": "string", "enum": ["suprimento", "sangria"] },
+        "amount": { "type": "number" },
+        "reason": { "type": "string" },
+        "timestamp": { "type": "string", "format": "date-time" }
+      },
+      "required": ["sessionId", "userId", "type", "amount", "timestamp"]
+    },
+    "product": {
+      "title": "Product",
+      "description": "Inventory item",
+      "type": "object",
+      "properties": {
+        "name": { "type": "string" },
+        "description": { "type": "string" },
+        "costPrice": { "type": "number" },
+        "price": { "type": "number" },
+        "stock": { "type": "number" },
+        "minStock": { "type": "number" },
+        "category": { "type": "string" },
+        "sku": { "type": "string" },
+        "barcode": { "type": "string" }
+      },
+      "required": ["name", "price", "stock", "minStock"]
+    },
+    "productMovement": {
+      "title": "Product Movement",
+      "description": "History of stock changes",
+      "type": "object",
+      "properties": {
+        "productId": { "type": "string" },
+        "productName": { "type": "string" },
+        "type": { "type": "string", "enum": ["entrada", "saida", "venda", "ajuste"] },
+        "quantity": { "type": "number" },
+        "reason": { "type": "string" },
+        "userId": { "type": "string" },
+        "userName": { "type": "string" },
+        "timestamp": { "type": "string", "format": "date-time" }
+      },
+      "required": ["productId", "type", "quantity", "userId", "timestamp"]
+    },
+    "service": {
+      "title": "Service",
+      "description": "Service item",
+      "type": "object",
+      "properties": {
+        "name": { "type": "string" },
+        "description": { "type": "string" },
+        "price": { "type": "number" }
+      },
+      "required": ["name", "price"]
+    },
+    "sale": {
+      "title": "Sale",
+      "description": "Customer sale record",
+      "type": "object",
+      "properties": {
+        "saleNumber": { "type": "number" },
+        "userId": { "type": "string" },
+        "userName": { "type": "string" },
+        "customerName": { "type": "string" },
+        "totalAmount": { "type": "number" },
+        "paymentMethod": { "type": "string" },
+        "timestamp": { "type": "string", "format": "date-time" },
+        "cashSessionId": { "type": "string" }
+      },
+      "required": ["saleNumber", "userId", "totalAmount", "paymentMethod", "timestamp", "cashSessionId"]
+    },
+    "financialEntry": {
+      "title": "Financial Entry",
+      "description": "Income or expense record",
+      "type": "object",
+      "properties": {
+        "type": { "type": "string", "enum": ["receita", "despesa"] },
+        "amount": { "type": "number" },
+        "description": { "type": "string" },
+        "category": { "type": "string" },
+        "date": { "type": "string", "format": "date-time" },
+        "dueDate": { "type": "string", "format": "date-time" },
+        "paymentDate": { "type": "string", "format": "date-time" },
+        "status": { "type": "string", "enum": ["pendente", "pago", "atrasado", "cancelado"] },
+        "saleId": { "type": "string" },
+        "userId": { "type": "string" }
+      },
+      "required": ["type", "amount", "description", "date", "dueDate", "status", "userId"]
+    },
+    "budget": {
+      "title": "Budget",
+      "description": "Customer quote/budget",
+      "type": "object",
+      "properties": {
+        "budgetNumber": { "type": "number" },
+        "userId": { "type": "string" },
+        "userName": { "type": "string" },
+        "customerName": { "type": "string" },
+        "totalAmount": { "type": "number" },
+        "status": { "type": "string", "enum": ["aberto", "aprovado", "recusado", "convertido"] },
+        "validUntil": { "type": "string", "format": "date-time" },
+        "timestamp": { "type": "string", "format": "date-time" }
+      },
+      "required": ["budgetNumber", "userId", "customerName", "totalAmount", "status", "timestamp"]
+    },
+    "serviceOrder": {
+      "title": "Service Order",
+      "description": "Bicycle repair order",
+      "type": "object",
+      "properties": {
+        "osNumber": { "type": "number" },
+        "userId": { "type": "string" },
+        "userName": { "type": "string" },
+        "customerName": { "type": "string" },
+        "bikeDetails": { "type": "string" },
+        "problemDescription": { "type": "string" },
+        "totalAmount": { "type": "number" },
+        "status": { "type": "string", "enum": ["aberto", "em_andamento", "finalizado", "entregue"] },
+        "timestamp": { "type": "string", "format": "date-time" },
+        "checklist": { "type": "object" }
+      },
+      "required": ["osNumber", "userId", "customerName", "status", "timestamp"]
+    },
+    "customer": {
+      "title": "Customer",
+      "description": "Client registration",
+      "type": "object",
+      "properties": {
+        "name": { "type": "string" },
+        "phone": { "type": "string" },
+        "document": { "type": "string" },
+        "address": { "type": "object" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["name", "phone", "createdAt"]
+    },
+    "supplier": {
+      "title": "Supplier",
+      "description": "Vendor registration",
+      "type": "object",
+      "properties": {
+        "name": { "type": "string" },
+        "phone": { "type": "string" },
+        "email": { "type": "string" },
+        "document": { "type": "string" },
+        "address": { "type": "object" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["name", "phone", "createdAt"]
+    },
+    "employee": {
+      "title": "Employee",
+      "description": "Staff registration",
+      "type": "object",
+      "properties": {
+        "name": { "type": "string" },
+        "email": { "type": "string" },
+        "position": { "type": "string" },
+        "permissions": { "type": "array" },
+        "active": { "type": "boolean" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["name", "email", "position", "createdAt"]
+    },
+    "settings": {
+      "title": "Company Settings",
+      "description": "Global shop configuration",
+      "type": "object",
+      "properties": {
+        "name": { "type": "string" },
+        "cnpj": { "type": "string" },
+        "phone": { "type": "string" },
+        "email": { "type": "string" },
+        "address": { "type": "object" },
+        "logoUrl": { "type": "string" },
+        "paymentMethods": { "type": "array" },
+        "productCategories": { "type": "array" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["name", "updatedAt"]
+    },
+    "serviceItem": {
+      "title": "Service Item",
+      "description": "Labor or service definition",
+      "type": "object",
+      "properties": {
+        "name": { "type": "string" },
+        "description": { "type": "string" },
+        "price": { "type": "number" }
+      },
+      "required": ["name", "price"]
+    },
+    "digitalCertificate": {
+      "title": "Digital Certificate",
+      "description": "A1 digital certificate metadata",
+      "type": "object",
+      "properties": {
+        "fileName": { "type": "string" },
+        "fileUrl": { "type": "string" },
+        "passwordEncrypted": { "type": "string" },
+        "validFrom": { "type": "string", "format": "date-time" },
+        "validTo": { "type": "string", "format": "date-time" },
+        "subject": { "type": "string" },
+        "issuer": { "type": "string" },
+        "status": { "type": "string", "enum": ["válido", "inválido", "expirado"] },
+        "updatedAt": { "type": "string", "format": "date-time" },
+        "updatedBy": { "type": "string" }
+      },
+      "required": ["fileName", "fileUrl", "passwordEncrypted", "validFrom", "validTo", "status"]
+    },
+    "fiscalConfig": {
+      "title": "Fiscal Configuration",
+      "description": "Settings for NF-e/NFC-e emission",
+      "type": "object",
+      "properties": {
+        "uid": { "type": "string" },
+        "cnpj": { "type": "string" },
+        "razaoSocial": { "type": "string" },
+        "ie": { "type": "string" },
+        "address": { "type": "object" },
+        "regimeTributario": { "type": "string", "enum": ["simples_nacional", "lucro_presumido", "lucro_real"] },
+        "ambiente": { "type": "string", "enum": ["homologacao", "producao"] },
+        "proximoNumeroNFe": { "type": "number" },
+        "proximoNumeroNFCe": { "type": "number" },
+        "serieNFe": { "type": "number" },
+        "serieNFCe": { "type": "number" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["uid", "cnpj", "razaoSocial", "regimeTributario", "ambiente"]
+    },
+    "fiscalNote": {
+      "title": "Fiscal Note",
+      "description": "NF-e or NFC-e record",
+      "type": "object",
+      "properties": {
+        "uid": { "type": "string" },
+        "tipo": { "type": "string", "enum": ["nfe", "nfce"] },
+        "origem": { "type": "string", "enum": ["venda", "os"] },
+        "origemId": { "type": "string" },
+        "cliente": { "type": "object" },
+        "itens": { "type": "array" },
+        "total": { "type": "number" },
+        "status": { "type": "string", "enum": ["pendente", "emitida", "cancelada", "erro"] },
+        "dataEmissao": { "type": "string", "format": "date-time" },
+        "numeroNota": { "type": "number" },
+        "serie": { "type": "number" },
+        "chaveAcesso": { "type": "string" },
+        "xml": { "type": "string" },
+        "cfop": { "type": "string" },
+        "naturezaOperacao": { "type": "string" },
+        "meioPagamento": { "type": "string" }
+      },
+      "required": ["uid", "tipo", "origem", "origemId", "status", "dataEmissao", "numeroNota"]
+    },
+    "bike": {
+      "title": "Bike",
+      "description": "Bicycle registration",
+      "type": "object",
+      "properties": {
+        "serialNumber": { "type": "string" },
+        "brand": { "type": "string" },
+        "model": { "type": "string" },
+        "color": { "type": "string" },
+        "year": { "type": "string" },
+        "type": { "type": "string" },
+        "customerId": { "type": "string" },
+        "customerName": { "type": "string" }
+      },
+      "required": ["brand", "model", "customerId"]
+    },
+    "appointment": {
+      "title": "Appointment",
+      "description": "Service schedule entry",
+      "type": "object",
+      "properties": {
+        "customerName": { "type": "string" },
+        "bikeDetails": { "type": "string" },
+        "date": { "type": "string" },
+        "time": { "type": "string" },
+        "service": { "type": "string" },
+        "status": { "type": "string", "enum": ["SCHEDULED", "CONFIRMED", "COMPLETED", "CANCELLED"] }
+      },
+      "required": ["customerName", "date", "time", "status"]
+    }
+  },
+  "firestore": {
+    "/users/{userId}": {
+      "schema": "user",
+      "description": "User profiles"
+    },
+    "/sales/{saleId}": {
+      "schema": "sale",
+      "description": "Sales records"
+    },
+    "/cashSessions/{sessionId}": {
+      "schema": "cashSession",
+      "description": "Cash register sessions"
+    },
+    "/cashMovements/{movementId}": {
+      "schema": "cashMovement",
+      "description": "Cash movements (suprimento/sangria)"
+    },
+    "/products/{productId}": {
+      "schema": "product",
+      "description": "Inventory products"
+    },
+    "/productMovements/{movementId}": {
+      "schema": "productMovement",
+      "description": "Stock movement history"
+    },
+    "/customers/{customerId}": {
+      "schema": "customer",
+      "description": "Customer records"
+    },
+    "/suppliers/{supplierId}": {
+      "schema": "supplier",
+      "description": "Supplier records"
+    },
+    "/employees/{employeeId}": {
+      "schema": "employee",
+      "description": "Employee records"
+    },
+    "/financialEntries/{entryId}": {
+      "schema": "financialEntry",
+      "description": "Financial records"
+    },
+    "/budgets/{budgetId}": {
+      "schema": "budget",
+      "description": "Customer budgets/quotes"
+    },
+    "/serviceOrders/{osId}": {
+      "schema": "serviceOrder",
+      "description": "Service orders"
+    },
+    "/logs/{logId}": {
+      "schema": "log",
+      "description": "System audit logs"
+    },
+    "/settings/{settingId}": {
+      "schema": "settings",
+      "description": "Global settings"
+    },
+    "/serviceItems/{serviceId}": {
+      "schema": "serviceItem",
+      "description": "Registered services"
+    },
+    "/config/certificate": {
+      "schema": "digitalCertificate",
+      "description": "A1 Digital Certificate configuration"
+    },
+    "/fiscalConfig/{configId}": {
+      "schema": "fiscalConfig",
+      "description": "User fiscal settings"
+    },
+    "/fiscalNotes/{noteId}": {
+      "schema": "fiscalNote",
+      "description": "Emitted fiscal notes"
+    },
+    "/bikes/{bikeId}": {
+      "schema": "bike",
+      "description": "Registered bicycles"
+    },
+    "/appointments/{appointmentId}": {
+      "schema": "appointment",
+      "description": "Service schedules"
+    }
+  }
+}
