@@ -151,7 +151,7 @@
 .border-gray-200,
 .border-gray-300,
 .border-gray-400 {
-  border-color: #2C2C2C !important;
+  border: none !important;
 }
 
 /* placeholders */
@@ -166,4 +166,53 @@ table {
 
 th {
   color: rgba(255,255,255,0.7);
+}
+/* ===== FIX PÁGINAS BRANCAS / INPUTS ===== */
+
+input::placeholder {
+  color: rgba(255,255,255,0.3);
+}
+
+input[type="text"],
+input[type="search"] {
+  background-color: #121212 !important;
+  color: white !important;
+}
+
+/* tabela / listas */
+table,
+thead,
+tbody,
+tr {
+  background-color: transparent !important;
+}
+
+thead {
+  background-color: #121212 !important;
+}
+
+th {
+  color: rgba(255,255,255,0.6) !important;
+}
+
+/* linhas */
+tr {
+  border-color: rgba(255,255,255,0.05) !important;
+}
+
+/* hover linhas */
+tr:hover {
+  background-color: rgba(255,255,255,0.03) !important;
+}
+
+/* textos apagados */
+.text-gray-500,
+.text-gray-600,
+.text-gray-700 {
+  color: rgba(255,255,255,0.6) !important;
+}
+
+/* badges tipo "convertido" */
+span:not(.text-red-500):not(.text-green-500):not(.text-yellow-500) {
+  color: white;
 }
