@@ -1,0 +1,132 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function isAdmin() {
+      return isSignedIn()
+        && exists(/databases/$(database)/documents/users/$(request.auth.uid))
+        && get(/databases/$(database)/documents/users/$(request.auth.uid)).data.isAdmin == true;
+    }
+
+    function isOwner() {
+      return isSignedIn()
+        && resource.data.userId == request.auth.uid;
+    }
+
+    function isIncomingOwner() {
+      return isSignedIn()
+        && request.resource.data.userId == request.auth.uid;
+    }
+
+    match /users/{userId} {
+      allow read: if isSignedIn() && (userId == request.auth.uid || isAdmin());
+      allow create: if isSignedIn() && userId == request.auth.uid;
+      allow update: if isSignedIn() && (userId == request.auth.uid || isAdmin());
+      allow delete: if isAdmin();
+    }
+
+    match /products/{docId} {
+      allow read: if isSignedIn() && (isOwner() || isAdmin());
+      allow create: if isIncomingOwner() || isAdmin();
+      allow update, delete: if isSignedIn() && (isOwner() || isAdmin());
+    }
+
+    match /productMovements/{docId} {
+      allow read: if isSignedIn() && (isOwner() || isAdmin());
+      allow create: if isIncomingOwner() || isAdmin();
+      allow update, delete: if isSignedIn() && (isOwner() || isAdmin());
+    }
+
+    match /sales/{docId} {
+      allow read: if isSignedIn() && (isOwner() || isAdmin());
+      allow create: if isIncomingOwner() || isAdmin();
+      allow update, delete: if isSignedIn() && (isOwner() || isAdmin());
+    }
+
+    match /budgets/{docId} {
+      allow read: if isSignedIn() && (isOwner() || isAdmin());
+      allow create: if isIncomingOwner() || isAdmin();
+      allow update, delete: if isSignedIn() && (isOwner() || isAdmin());
+    }
+
+    match /serviceOrders/{docId} {
+      allow read: if isSignedIn() && (isOwner() || isAdmin());
+      allow create: if isIncomingOwner() || isAdmin();
+      allow update, delete: if isSignedIn() && (isOwner() || isAdmin());
+    }
+
+    match /customers/{docId} {
+      allow read: if isSignedIn() && (isOwner() || isAdmin() || resource.data.userId == null);
+      allow create: if isIncomingOwner() || isAdmin() || request.resource.data.userId == null;
+      allow update, delete: if isSignedIn() && (isOwner() || isAdmin() || resource.data.userId == null);
+    }
+
+    match /suppliers/{docId} {
+      allow read: if isSignedIn() && (isOwner() || isAdmin() || resource.data.userId == null);
+      allow create: if isIncomingOwner() || isAdmin() || request.resource.data.userId == null;
+      allow update, delete: if isSignedIn() && (isOwner() || isAdmin() || resource.data.userId == null);
+    }
+
+    match /bikes/{docId} {
+      allow read: if isSignedIn() && (isOwner() || isAdmin());
+      allow create: if isIncomingOwner() || isAdmin();
+      allow update, delete: if isSignedIn() && (isOwner() || isAdmin());
+    }
+
+    match /financialEntries/{docId} {
+      allow read: if isSignedIn() && (isOwner() || isAdmin());
+      allow create: if isIncomingOwner() || isAdmin();
+      allow update, delete: if isSignedIn() && (isOwner() || isAdmin());
+    }
+
+    match /bankAccounts/{docId} {
+      allow read: if isSignedIn() && (isOwner() || isAdmin());
+      allow create: if isIncomingOwner() || isAdmin();
+      allow update, delete: if isSignedIn() && (isOwner() || isAdmin());
+    }
+
+    match /cashSessions/{docId} {
+      allow read: if isSignedIn() && (isOwner() || isAdmin());
+      allow create: if isIncomingOwner() || isAdmin();
+      allow update, delete: if isSignedIn() && (isOwner() || isAdmin());
+    }
+
+    match /cashMovements/{docId} {
+      allow read: if isSignedIn() && (isOwner() || isAdmin());
+      allow create: if isIncomingOwner() || isAdmin();
+      allow update, delete: if isSignedIn() && (isOwner() || isAdmin());
+    }
+
+    match /appointments/{docId} {
+      allow read: if isSignedIn() && (isOwner() || isAdmin());
+      allow create: if isIncomingOwner() || isAdmin();
+      allow update, delete: if isSignedIn() && (isOwner() || isAdmin());
+    }
+
+    match /settings/{docId} {
+      allow read: if isSignedIn();
+      allow write: if isAdmin();
+    }
+
+    match /classes_produtos/{docId} {
+      allow read: if isSignedIn();
+      allow write: if isAdmin();
+    }
+
+    match /logs/{docId} {
+      allow read: if isAdmin();
+      allow create: if isSignedIn();
+      allow update, delete: if false;
+    }
+
+    match /_connection_test_/{docId} {
+      allow read: if true;
+      allow write: if isSignedIn();
+    }
+  }
+}

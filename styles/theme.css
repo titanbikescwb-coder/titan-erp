@@ -1,0 +1,93 @@
+:root {
+  --color-primary: #0A84FF;
+
+  --color-bg: #0A0A0A;
+  --color-card: #121212;
+  --color-border: #2C2C2C;
+
+  --color-text: #FFFFFF;
+  --color-text-secondary: #A1A1AA;
+}
+
+/* BASE GLOBAL */
+body {
+  background: var(--color-bg) !important;
+  color: var(--color-text);
+  font-family: 'Inter', sans-serif;
+}
+/* TIPOGRAFIA PADRÃO */
+
+.title {
+  font-size: 28px;
+  font-weight: 800;
+  letter-spacing: -0.5px;
+}
+
+.subtitle {
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.label {
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--color-text-secondary);
+}
+
+.text {
+  font-size: 14px;
+  font-weight: 400;
+  color: #E4E4E7;
+}
+
+.value {
+  font-size: 22px;
+  font-weight: 700;
+}
+/* ÍCONES PADRÃO */
+
+.icon {
+  width: 18px;
+  height: 18px;
+}
+
+.icon-sm {
+  width: 14px;
+  height: 14px;
+}
+
+.icon-lg {
+  width: 24px;
+  height: 24px;
+}
+
+/* CORES */
+
+.icon-default {
+  color: #A1A1AA;
+}
+
+.icon-active {
+  color: var(--color-primary);
+}
+
+.icon-success {
+  color: #22c55e;
+}
+
+.icon-danger {
+  color: #ef4444;
+}
+.app-bg {
+  background: radial-gradient(
+    circle at top,
+    rgba(10, 132, 255, 0.08),
+    transparent 60%
+  ),
+  var(--color-bg);
+}
+.app-bg {
+  background: var(--color-bg);
+}
