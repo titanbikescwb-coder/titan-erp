@@ -299,6 +299,22 @@ export interface Employee {
   createdAt: any;
 }
 
+export type AccentColorKey =
+  | 'blue'
+  | 'green'
+  | 'purple'
+  | 'orange'
+  | 'red'
+  | 'cyan'
+  | 'gold';
+
+export interface AppearanceSettings {
+  accentColor: AccentColorKey;
+  theme: 'dark';
+  borderRadius: 'modern' | 'classic';
+  compactMode: boolean;
+}
+
 export interface CompanySettings {
   id: string;
   userId?: string;
@@ -313,6 +329,7 @@ export interface CompanySettings {
   showAddressOnReceipt?: boolean;
   paymentMethods: string[];
   productCategories: string[];
+  appearance?: AppearanceSettings;
   updatedAt: any;
 }
 

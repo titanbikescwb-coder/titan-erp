@@ -1,3 +1,9 @@
+import { 
+  ACCENT_COLORS, 
+  type AccentColorKey 
+} from '../theme/accentColors';
+
+import { applyAccentColor } from '../theme/themeManager';
 import { toast } from 'react-hot-toast';
 import backupService from '../services/backupService';
 import React, { useState, useEffect } from 'react';
@@ -20,7 +26,8 @@ import {
   ShieldAlert,
   ShieldX,
   Key,
-  Upload
+  Upload,
+  Palette
 } from 'lucide-react';
 import { motion } from 'motion/react';
 import { cn } from '../lib/utils';
@@ -65,12 +72,20 @@ export default function Configuracoes() {
       estado: ''
     } as Address,
     paymentMethods: [] as string[],
-    productCategories: [] as string[]
+    productCategories: [] as string[],
+appearance: {
+  accentColor: 'blue' as AccentColorKey,
+  theme: 'dark' as const,
+  borderRadius: 'modern' as const,
+  compactMode: false
+}
   });
 
   const [newPayment, setNewPayment] = useState('');
   const [newCategory, setNewCategory] = useState('');
-  const [activeTab, setActiveTab] = useState<'empresa' | 'pagamentos' | 'certificado'>('empresa');
+  const [activeTab, setActiveTab] = useState<
+  'empresa' | 'pagamentos' | 'certificado' | 'personalizacao'
+>('empresa');
   const [certFile, setCertFile] = useState<File | null>(null);
   const [certPassword, setCertPassword] = useState('');
 
@@ -96,7 +111,14 @@ export default function Configuracoes() {
             estado: ''
           },
           paymentMethods: data.paymentMethods || [],
-          productCategories: data.productCategories || []
+          productCategories: data.productCategories || [],
+
+appearance: data.appearance || {
+  accentColor: 'blue',
+  theme: 'dark',
+  borderRadius: 'modern',
+  compactMode: false
+}
         });
       }
     });
@@ -242,6 +264,7 @@ export default function Configuracoes() {
               { id: 'empresa', label: 'Empresa', icon: Building2 },
               { id: 'pagamentos', label: 'Pagamentos', icon: CreditCard },
               { id: 'certificado', label: 'Certificado', icon: FileText },
+              { id: 'personalizacao', label: 'Personalização', icon: Palette },
             ].map(tab => (
               <Button
                 key={tab.id}
@@ -731,7 +754,224 @@ export default function Configuracoes() {
             </div>
           </form>
         )}
+{activeTab === 'personalizacao' && (
+  <form onSubmit={handleSave} className="space-y-10">
 
+    <section className="
+      card-premium
+      p-10
+      rounded-[40px]
+      border border-titan-border
+      shadow-[0_40px_100px_rgba(0,0,0,0.6)]
+      space-y-10
+    ">
+
+      <div className="flex items-center gap-4 pb-6 border-b border-white/5">
+
+        <div className="
+          bg-titan-primary/20
+          p-4
+          rounded-[20px]
+          text-titan-primary
+          border border-titan-primary/30
+        ">
+          <Palette className="w-6 h-6" />
+        </div>
+
+        <div>
+          <h3 className="
+            text-xl
+            font-black
+            text-white
+            uppercase
+          ">
+            Identidade Visual
+          </h3>
+
+          <p className="
+            text-[10px]
+            text-white/40
+            font-black
+            uppercase
+            tracking-[0.2em]
+          ">
+            Personalize a aparência do Titan ERP
+          </p>
+        </div>
+
+      </div>
+
+
+      {/* CORES */}
+      <div>
+
+        <h4 className="
+          text-sm
+          text-white
+          font-black
+          uppercase
+          tracking-widest
+          mb-6
+        ">
+          Cor principal
+        </h4>
+
+
+        <div className="
+          grid
+          grid-cols-2
+          md:grid-cols-4
+          gap-5
+        ">
+
+          {Object.entries(ACCENT_COLORS).map(([key, color]) => (
+
+            <button
+              key={key}
+              type="button"
+
+              onClick={() => {
+
+                const accent =
+                  key as AccentColorKey;
+
+                setFormData(prev => ({
+                  ...prev,
+                  appearance:{
+                    ...prev.appearance,
+                    accentColor: accent
+                  }
+                }));
+
+                applyAccentColor(accent);
+
+              }}
+
+              className={cn(
+                `
+                h-24
+                rounded-[28px]
+                border
+                flex
+                flex-col
+                items-center
+                justify-center
+                gap-3
+                bg-black/30
+                transition-all
+                hover:scale-105
+                `,
+                formData.appearance.accentColor === key
+                  ? "border-white"
+                  : "border-white/10"
+              )}
+
+            >
+
+              <span
+                className="
+                w-8
+                h-8
+                rounded-full
+                "
+                style={{
+                  background: color.primary
+                }}
+              />
+
+              <span className="
+                text-xs
+                text-white
+                font-bold
+              ">
+                {color.label}
+              </span>
+
+
+            </button>
+
+          ))}
+
+        </div>
+
+      </div>
+
+
+      {/* PREVIEW */}
+
+      <div className="
+        bg-black/30
+        border border-white/10
+        rounded-[32px]
+        p-8
+        space-y-5
+      ">
+
+        <p className="
+          text-white
+          font-black
+          uppercase
+        ">
+          Preview
+        </p>
+
+
+        <button
+          type="button"
+          className="
+          px-8
+          py-4
+          rounded-2xl
+          bg-titan-primary
+          text-white
+          font-bold
+          "
+        >
+          Botão Titan
+        </button>
+
+
+        <div className="
+          p-5
+          rounded-3xl
+          border
+          border-titan-primary
+        ">
+
+          <p className="text-white">
+            Card usando sua cor
+          </p>
+
+        </div>
+
+      </div>
+
+
+      <div className="flex justify-end">
+
+        <Button
+          type="submit"
+          loading={loading}
+          className="
+          h-16
+          px-12
+          rounded-[28px]
+          bg-titan-primary
+          text-white
+          "
+        >
+
+          Salvar Personalização
+
+        </Button>
+
+      </div>
+
+
+    </section>
+
+  </form>
+)}
         {activeTab === 'certificado' && (
           <div className="space-y-10">
             {certificate ? (

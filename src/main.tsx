@@ -1,3 +1,4 @@
+import { applyAccentColor } from './theme/themeManager';
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import { Toaster } from 'react-hot-toast';
@@ -5,6 +6,9 @@ import { Toaster } from 'react-hot-toast';
 import App from './App.tsx';
 import './index.css';
 import { ErrorBoundary } from './components/ErrorBoundary.tsx';
+
+// Inicializa a cor padrão do sistema
+applyAccentColor();
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
